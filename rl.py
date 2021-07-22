@@ -4,12 +4,15 @@ from stable_baselines3.common.evaluation import evaluate_policy
 import json
 from typing import Callable
 from hyperparameters import Hyperparameters
-
+from stable_baselines3.common import results_plotter
+from stable_baselines3.common.monitor import Monitor
+import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 class RLAlgorithm:
     def __init__(self):
-        # Create environment
-        self.env = gym.make('LunarLander-v2')
         self.params = Hyperparameters()
         self.model = None
         self.algo_name = ""
@@ -20,15 +23,33 @@ class RLAlgorithm:
         self.lr_size = 4
         self.a_size = 3
         self.c_size = 3
+        self.log_dir = os.getcwd() + "/logs/"
+        os.makedirs(self.log_dir, exist_ok=True)
+        self.env = Monitor(gym.make('LunarLander-v2'))
 
     def grid_search(self):
         hyp_id = 0
         for learning_idx in range(self.lr_size):
             for actor_idx in range(self.a_size):
                 for critic_idx in range(self.c_size):
+                    self.env = Monitor(gym.make('LunarLander-v2'))
                     hyp_id += 1
                     dictionary, model_name = self.train(learning_idx, actor_idx, critic_idx, hyp_id)
                     self.evaluate(model_name, dictionary)
+
+    def plot_results(self, file_name):
+        sns.set_theme()
+        qualitative_colors = sns.color_palette("bright")
+        fig_dir = self.log_dir + "figures/"
+        os.makedirs(fig_dir, exist_ok=True)
+        plt.xlim(0, self.env.get_total_steps())
+        plt.ylabel('Episode Rewards')
+        plt.xlabel('Timesteps')
+        x = np.cumsum(self.env.get_episode_lengths())
+        plt.plot(x, np.zeros(len(x)), color="k", lw=1)
+        plt.plot(x, self.env.get_episode_rewards(), color=qualitative_colors[0], lw=1)
+        plt.savefig(fig_dir + file_name, format="png")
+        plt.clf()
 
     def train(self, learning_idx, actor_idx, critic_idx, hyp_id):
         # Choose hyperparameters
@@ -37,6 +58,8 @@ class RLAlgorithm:
         model_name = self.create_model(learning_rate, policy_kwargs, hyp_id)
         # Train the model
         self.model.learn(total_timesteps=self.train_timesteps)
+        # Plot the results
+        self.plot_results("{}_{}.png".format(self.algo_name, hyp_id))
         # Save the model
         self.model.save(model_name)
         return self.create_model_info_dict(model_name, learning_rate, policy_info), model_name
@@ -99,7 +122,7 @@ class RLAlgorithm:
     def record_video(self, video_name, video_length, model_name):
         record_env = DummyVecEnv([lambda: gym.make('LunarLander-v2')])
         obs = record_env.reset()
-        record_env = VecVideoRecorder(record_env, 'recordings/',
+        record_env = VecVideoRecorder(record_env, 'logs/videos/',
                                record_video_trigger=lambda x: x == 0, video_length=video_length,
                                name_prefix=video_name)
         record_env.reset()
