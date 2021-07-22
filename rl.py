@@ -1,5 +1,5 @@
 import gym
-
+from stable_baselines3.common.vec_env import VecVideoRecorder, DummyVecEnv
 from stable_baselines3.common.evaluation import evaluate_policy
 import json
 from typing import Callable
@@ -95,3 +95,16 @@ class RLAlgorithm:
             self.env.render()
             if done:
               obs = self.env.reset()
+
+    def record_video(self, video_name, video_length, model_name):
+        record_env = DummyVecEnv([lambda: gym.make('LunarLander-v2')])
+        obs = record_env.reset()
+        record_env = VecVideoRecorder(record_env, 'recordings/',
+                               record_video_trigger=lambda x: x == 0, video_length=video_length,
+                               name_prefix=video_name)
+        record_env.reset()
+        model = self.load_model_from_file(model_name)
+        for _ in range(video_length + 1):
+            action, _ = model.predict(obs, deterministic=True)
+            obs, _, _, _ = record_env.step(action)
+        env.close()
