@@ -158,12 +158,13 @@ class RLAlgorithm:
         hyp_id = self.parse_hyp_id(model_name)
         # Create the model
         model, model_name = self.create_model(learning_rate, gamma, policy_kwargs, hyp_id)
-        # Train the model
-        model.learn(total_timesteps=self.train_timesteps)
-        # Plot the results
-        self.plot_results("{}_{}.png".format(self.algo_name, hyp_id))
-        # Save the model
-        model.save(model_name)
+        print(model_name)
+        # # Train the model
+        # model.learn(total_timesteps=self.train_timesteps)
+        # # Plot the results
+        # self.plot_results("{}_{}.png".format(self.algo_name, hyp_id))
+        # # Save the model
+        # model.save(model_name)
         return model_name
 
     def choose_params_from_file(self, model_name):
@@ -195,9 +196,9 @@ class RLAlgorithm:
 
     def create_best_results_file(self):
         self.best_models.sort(reverse=True)
-        f = open(self.logs_dir_name + "best_results_" + self.algo_name + ".txt", "w")
-        for model in self.models:
+        f = open(self.log_dir_name + "best_results_" + self.algo_name + ".txt", "w")
+        for model in self.best_models:
             line = "Model: " + model[2] + " Mean reward: " + str(model[0]) + " Std reward: " + str(model[1]) + "\n"
             f.write(line)
         f.close()
-        return self.models
+        return self.best_models
