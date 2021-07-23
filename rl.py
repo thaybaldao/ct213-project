@@ -140,7 +140,7 @@ class RLAlgorithm:
         video_length = self.simulation_timesteps
         record_env = DummyVecEnv([lambda: gym.make(self.env_name)])
         obs = record_env.reset()
-        record_env = VecVideoRecorder(record_env, 'logs/videos/',
+        record_env = VecVideoRecorder(record_env, self.log_dir_name + 'videos/',
                                       record_video_trigger=lambda x: x == 0, video_length=video_length,
                                       name_prefix=model_name)
         record_env.reset()
@@ -159,12 +159,12 @@ class RLAlgorithm:
         # Create the model
         model, model_name = self.create_model(learning_rate, gamma, policy_kwargs, hyp_id)
         print(model_name)
-        # # Train the model
-        # model.learn(total_timesteps=self.train_timesteps)
-        # # Plot the results
-        # self.plot_results("{}_{}.png".format(self.algo_name, hyp_id))
-        # # Save the model
-        # model.save(model_name)
+        # Train the model
+        model.learn(total_timesteps=self.train_timesteps)
+        # Plot the results
+        self.plot_results("{}_{}.png".format(self.algo_name, hyp_id))
+        # Save the model
+        model.save(model_name)
         return model_name
 
     def choose_params_from_file(self, model_name):
