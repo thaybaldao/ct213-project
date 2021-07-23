@@ -1,0 +1,17 @@
+{
+    "model_name": "ppo_18",
+    "learning_rate": 0.001,
+    "gamma": 0.8999999999999999,
+    "policy_kwargs": {
+        "pi": [
+            128,
+            128
+        ],
+        "vf": [
+            128,
+            128
+        ]
+    },
+    "mean_reward": -119.0693518,
+    "std_reward": 27.403174013431606
+}

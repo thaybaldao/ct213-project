@@ -22,12 +22,18 @@ class Hyperparameters:
     def create_policy_kwargs(self, actor_size, actor_idx, critic_size, critic_idx):
         pi_net = self.create_net(actor_size, actor_idx)
         vf_net = self.create_net(critic_size, critic_idx)
-        policy_args = dict(activation_fn=th.nn.ReLU,
-                           net_arch=[dict(pi=pi_net,
-                                          vf=vf_net)])
+        policy_kwargs = dict(activation_fn=th.nn.ReLU,
+                             net_arch=[dict(pi=pi_net,
+                                            vf=vf_net)])
         policy_info = {
             "pi": pi_net,
             "vf": vf_net
         }
 
-        return policy_args, policy_info
+        return policy_kwargs, policy_info
+
+    def create_policy_kwargs_from_dict(self, dictionary):
+        policy_kwargs = dict(activation_fn=th.nn.ReLU,
+                             net_arch=[dict(pi=dictionary['pi'],
+                                            vf=dictionary['vf'])])
+        return policy_kwargs
