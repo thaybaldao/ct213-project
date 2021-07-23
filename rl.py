@@ -190,7 +190,7 @@ class RLAlgorithm:
         model = self.load_model_from_file(model_name)
         mean_reward, std_reward = evaluate_policy(model, model.get_env(),
                                                   n_eval_episodes=self.n_eval_episodes)
-        self.best_models.append(mean_reward, std_reward, model_name)
+        self.best_models.append((mean_reward, std_reward, model_name))
 
     def create_best_results_file(self):
         self.best_models.sort(reverse=True)
