@@ -4,7 +4,7 @@ from a2c import A2CAlgorithm
 train_timesteps = int(1e5)
 simulation_timesteps = 1200
 n_eval_episodes = 30
-log_dir_name = "/logs"
+log_dir_name = "logs/"
 env_name = 'LunarLander-v2'
 net_size = 2
 learning_rate_size = 3

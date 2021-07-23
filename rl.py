@@ -118,7 +118,7 @@ class RLAlgorithm:
 
     def create_results_file(self):
         self.models.sort(reverse=True)
-        f = open("results_" + self.algo_name + ".txt", "w")
+        f = open(self.logs_dir_name + "results_" + self.algo_name + ".txt", "w")
         for model in self.models:
             line = "Model: " + model[1] + " Mean reward: " + str(model[0]) + "\n"
             f.write(line)
@@ -173,7 +173,8 @@ class RLAlgorithm:
         policy_kwargs = self.params.create_policy_kwargs_from_dict(dictionary['policy_kwargs'])
         return learning_rate, gamma, policy_kwargs
 
-    def parse_hyp_id(self, model_name):
+    @staticmethod
+    def parse_hyp_id(model_name):
         split_model_name = model_name.split("_")
         return int(split_model_name[1]) + 1000  # + 1000 to avoid overriding grid_search results
 
@@ -194,7 +195,7 @@ class RLAlgorithm:
 
     def create_best_results_file(self):
         self.best_models.sort(reverse=True)
-        f = open("best_results_" + self.algo_name + ".txt", "w")
+        f = open(self.logs_dir_name + "best_results_" + self.algo_name + ".txt", "w")
         for model in self.models:
             line = "Model: " + model[2] + " Mean reward: " + str(model[0]) + " Std reward: " + str(model[1]) + "\n"
             f.write(line)
