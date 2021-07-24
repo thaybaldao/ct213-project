@@ -118,7 +118,7 @@ class RLAlgorithm:
 
     def create_results_file(self):
         self.models.sort(reverse=True)
-        f = open(self.logs_dir_name + "results_" + self.algo_name + ".txt", "w")
+        f = open(self.log_dir_name + "results_" + self.algo_name + ".txt", "w")
         for model in self.models:
             line = "Model: " + model[1] + " Mean reward: " + str(model[0]) + "\n"
             f.write(line)
@@ -158,7 +158,7 @@ class RLAlgorithm:
         hyp_id = self.parse_hyp_id(model_name)
         # Create the model
         model, model_name = self.create_model(learning_rate, gamma, policy_kwargs, hyp_id)
-        print(model_name)
+        model_name += "_final_training"
         # Train the model
         model.learn(total_timesteps=self.train_timesteps)
         # Plot the results
@@ -177,7 +177,7 @@ class RLAlgorithm:
     @staticmethod
     def parse_hyp_id(model_name):
         split_model_name = model_name.split("_")
-        return int(split_model_name[1]) + 1000  # + 1000 to avoid overriding grid_search results
+        return int(split_model_name[1])
 
     def read_json(self, model_name):
         self.models_dir_name = "logs/models/"

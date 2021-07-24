@@ -1,10 +1,13 @@
 from ppo import PPOAlgorithm
 from a2c import A2CAlgorithm
 
+# TODO: choose training and evaluating parameters
 train_timesteps = int(2e5)
 simulation_timesteps = 1200
 n_eval_episodes = 100
 log_dir_name = "best_logs/"
+
+# TODO: choose which algorithm you want to train
 algo = "ppo"
 # algo = "a2c"
 
@@ -15,6 +18,7 @@ if algo == "ppo":
         n_eval_episodes,
         log_dir_name
     )
+    # TODO: fill in best_models_names with the names of the best PPO models according to grid search
     best_models_names = ['ppo_9', 'ppo_89']
     for best_model_name in best_models_names:
         model_name = ppo_algorithm.train_best(best_model_name)
@@ -32,7 +36,8 @@ if algo == "a2c":
         n_eval_episodes,
         log_dir_name
     )
-    best_models_names = ['a2c_9', 'a2c_89']
+    # TODO: fill in best_models_names with the names of the best A2C models according to grid search
+    best_models_names = ['a2c_49', 'a2c_127', 'a2c_154']
     for best_model_name in best_models_names:
         model_name = a2c_algorithm.train_best(best_model_name)
         a2c_algorithm.evaluate_best(model_name)

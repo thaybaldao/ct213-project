@@ -1,16 +1,23 @@
 from ppo import PPOAlgorithm
 from a2c import A2CAlgorithm
 
+# TODO: choose training and evaluating parameters
 train_timesteps = int(1e5)
 simulation_timesteps = 1200
 n_eval_episodes = 30
 log_dir_name = "logs/"
 env_name = 'LunarLander-v2'
-net_size = 2
-learning_rate_size = 3
-gamma_size = 3
-actor_size = 3
-critic_size = 3
+net_size = 2  # how many different number of layers will be used in the actor and critic nets in the grid search
+# learning_rate_size = 3  # how many different learning rate values will be used in the grid search
+# gamma_size = 3  # how many different gamma values will be used in the grid search
+# actor_size = 3  # how many different unit values will be used in the actor net in the grid search
+# critic_size = 3  # how many different unit values will be used in the critic net in the grid search
+learning_rate_size = 1  # how many different learning rate values will be used in the grid search
+gamma_size = 1  # how many different gamma values will be used in the grid search
+actor_size = 1  # how many different unit values will be used in the actor net in the grid search
+critic_size = 1  # how many different unit values will be used in the critic net in the grid search
+
+# TODO: choose which algorithm you want to train
 algo = "ppo"
 # algo = "a2c"
 
